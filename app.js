@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initNavigation();
+    initViewToggle();
     loadStrapiData(); // Simulate loading content from CMS
 });
 
@@ -77,18 +78,23 @@ async function loadStrapiData() {
     try {
         console.log('Fetching data from Strapi backend...');
 
-        // 1. Fetch Services
-        const servicesRes = await fetch('http://localhost:1337/api/services');
+        // 1. Fetch Categories and Services
+        const categoriesRes = await fetch('http://localhost:1337/api/categories');
+        const categoriesData = await categoriesRes.json();
+        const servicesRes = await fetch('http://localhost:1337/api/services?populate=category');
         const servicesData = await servicesRes.json();
-        renderServices(servicesData.data);
+
+        window.itrikServices = servicesData.data; // Store globally for filtering
+        renderCategoryFilters(categoriesData.data);
+        renderServices(window.itrikServices);
 
         // 2. Fetch About
-        const aboutRes = await fetch('http://localhost:1337/api/abouts');
+        const aboutRes = await fetch('http://localhost:1337/api/about');
         const aboutData = await aboutRes.json();
         renderAbout(aboutData.data);
 
         // 3. Fetch Contact
-        const contactRes = await fetch('http://localhost:1337/api/contacts');
+        const contactRes = await fetch('http://localhost:1337/api/contact');
         const contactData = await contactRes.json();
         renderContact(contactData.data);
 
@@ -100,6 +106,76 @@ async function loadStrapiData() {
             </div>
         `;
     }
+}
+
+function initViewToggle() {
+    const viewBtns = document.querySelectorAll('.view-btn');
+    const servicesContainer = document.getElementById('services-cms-content');
+
+    // Load saved view from local storage
+    const savedView = localStorage.getItem('servicesView') || 'grid';
+    applyView(savedView);
+
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const viewType = btn.getAttribute('data-view');
+            applyView(viewType);
+            localStorage.setItem('servicesView', viewType);
+        });
+    });
+
+    function applyView(viewType) {
+        // Toggle active button
+        viewBtns.forEach(btn => {
+            if (btn.getAttribute('data-view') === viewType) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        // Apply class to container
+        if (viewType === 'list') {
+            servicesContainer.classList.add('list-view');
+        } else {
+            servicesContainer.classList.remove('list-view');
+        }
+    }
+}
+
+function renderCategoryFilters(categories) {
+    const filtersContainer = document.getElementById('category-filters');
+
+    // Default 'All' button already exists in HTML
+
+    categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.setAttribute('data-filter', cat.documentId);
+        btn.innerText = cat.name;
+        filtersContainer.appendChild(btn);
+    });
+
+    // Add event listeners to filter buttons
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            // Remove active class from all
+            filterBtns.forEach(b => b.classList.remove('active'));
+            // Add active class to clicked
+            e.target.classList.add('active');
+
+            const filterValue = e.target.getAttribute('data-filter');
+            if (filterValue === 'all') {
+                renderServices(window.itrikServices);
+            } else {
+                const filtered = window.itrikServices.filter(s => {
+                    return s.category && s.category.documentId === filterValue;
+                });
+                renderServices(filtered);
+            }
+        });
+    });
 }
 
 function renderServices(services) {
@@ -114,11 +190,31 @@ function renderServices(services) {
     services.forEach(s => {
         const card = document.createElement('div');
         card.className = 'service-card';
+
+        let pricingHTML = '';
+        if (s.pricingOptions && Array.isArray(s.pricingOptions) && s.pricingOptions.length > 0) {
+            pricingHTML = '<div class="service-options-list">';
+            s.pricingOptions.forEach(opt => {
+                pricingHTML += `
+                    <div class="service-option-row">
+                        <span class="option-name">${opt.option}</span>
+                        <span class="option-price">₹${opt.price}</span>
+                    </div>
+                `;
+            });
+            pricingHTML += '</div>';
+        } else {
+            pricingHTML = `<div class="service-price">Starting from ₹${s.price}</div>`;
+        }
+
+        // Wrapper added to separate icon and button from text in flex lists
         card.innerHTML = `
             <ion-icon name="sparkles-outline" style="font-size: 3rem; color: var(--gold); margin-bottom: 1rem;"></ion-icon>
-            <h3>${s.name}</h3>
-            <p>${s.description || ''}</p>
-            <div class="service-price">$${s.price}</div>
+            <div class="service-card-content">
+                <h3>${s.name}</h3>
+                <p>${s.description || ''}</p>
+                ${pricingHTML}
+            </div>
             <button class="cta-button" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="navigateTo('contact')">Book Now</button>
         `;
         container.appendChild(card);

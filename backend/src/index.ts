@@ -71,6 +71,64 @@ export default {
         });
       }
 
+      // 2.5 Ensure Services have pricing options (Migration/Update script)
+      const allServices = await strapi.documents('api::service.service').findMany();
+      if (allServices.length > 0 && !allServices[0].pricingOptions) {
+        console.log("Migrating services to new pricing options structure...");
+        // Delete old simple ones
+        for (const s of allServices) {
+          await strapi.documents('api::service.service').delete({ documentId: s.documentId });
+        }
+        const cats = await strapi.documents('api::category.category').findMany();
+        const hairCare = cats.find(c => c.name.includes('Hair'));
+        const skinCare = cats.find(c => c.name.includes('Skin'));
+
+        if (hairCare) {
+          await strapi.documents('api::service.service').create({
+            data: {
+              name: 'Haircut',
+              description: 'Professional salon haircut. Rate depends on wash inclusion.',
+              price: 250,
+              category: hairCare.documentId,
+              pricingOptions: [
+                { option: "Basic Haircut", price: 250 },
+                { option: "Haircut with Wash & Blowdry", price: 300 }
+              ],
+              status: 'published'
+            }
+          });
+          await strapi.documents('api::service.service').create({
+            data: {
+              name: 'Hair Coloring & Styling',
+              description: 'Refresh your look with premium hair coloring products.',
+              price: 800,
+              category: hairCare.documentId,
+              pricingOptions: [
+                { option: "Root Touchup", price: 800 },
+                { option: "Full Length Color", price: 1500 },
+                { option: "Highlights / Balayage", price: 2500 }
+              ],
+              status: 'published'
+            }
+          });
+        }
+        if (skinCare) {
+          await strapi.documents('api::service.service').create({
+            data: {
+              name: 'Gold Facial',
+              description: 'A luxurious gold facial for radiant skin. Products vary by tier.',
+              price: 1500,
+              category: skinCare.documentId,
+              pricingOptions: [
+                { option: "Standard Product 1", price: 1500 },
+                { option: "Premium Product 2", price: 2500 },
+                { option: "Luxury Organic Product 3", price: 3500 }
+              ],
+              status: 'published'
+            }
+          });
+        }
+      }
       // 3. Add Dummy About Page
       const existingAbout = await strapi.documents('api::about.about').findMany();
       if (existingAbout.length === 0) {
@@ -97,6 +155,18 @@ export default {
             status: 'published'
           }
         });
+      }
+
+      // 5. Publish all drafts to ensure they are available to the public API
+      console.log('Publishing all dummy data drafts...');
+      const APIs = ['api::category.category', 'api::service.service', 'api::about.about', 'api::contact.contact'];
+      for (const api of APIs) {
+        const drafts = await strapi.documents(api as any).findMany({ status: 'draft' });
+        for (const draft of drafts) {
+          if (!draft.publishedAt) {
+            await strapi.documents(api as any).publish({ documentId: draft.documentId });
+          }
+        }
       }
 
       console.log('Bootstrap finished successfully.');

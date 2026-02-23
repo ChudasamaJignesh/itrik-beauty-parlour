@@ -1,28 +1,43 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ITRIK Beauty Parlour</title>
-    <meta name="description" content="Premium Beauty Parlour managed by Kirti Chudasama. Offering top-tier services for all your beauty needs.">
+    <meta name="description"
+        content="Premium Beauty Parlour managed by Kirti Chudasama. Offering top-tier services for all your beauty needs.">
     <!-- Google Fonts for Modern Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
     <!-- Ionicons for Navigation Icons -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <!-- Desktop Sidebar / Header & Mobile Top Header -->
     <header class="app-header">
         <div class="logo-container">
-            <!-- Utilizing CSS filters for light/dark mode adaptation or simply matching the theme -->
-            <img src="logo.png" alt="ITRIK Beauty Parlour Logo" class="brand-logo" id="brand-logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/150x200/000000/d4af37?text=ITRIK'">
+            <!-- SVG Filter to perfectly translate the black background of the logo into a transparent background -->
+            <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+                <filter id="remove-black-bg" color-interpolation-filters="sRGB">
+                    <feColorMatrix type="matrix" values="
+                        1 0 0 0 0
+                        0 1 0 0 0
+                        0 0 1 0 0
+                        2 2 2 0 0
+                    " />
+                </filter>
+            </svg>
+            <img src="logo.png" alt="ITRIK Beauty Parlour Logo" class="brand-logo" id="brand-logo">
         </div>
-        
+
         <nav class="desktop-nav">
             <a href="#home" class="nav-item active" data-page="home">
                 <ion-icon name="home-outline"></ion-icon>
@@ -52,7 +67,7 @@
 
     <!-- Main Content Area -->
     <main class="content-area">
-        
+
         <!-- Home Section -->
         <section id="home" class="page-section active">
             <div class="hero">
@@ -69,10 +84,26 @@
 
         <!-- Menu / Rate Card Section -->
         <section id="menu" class="page-section">
-            <div class="section-header">
-                <h2>Our <span class="gold-text">Services</span> & Rate Card</h2>
-                <p>Premium treatments to make you glow.</p>
+            <div class="section-header menu-header">
+                <div class="header-text">
+                    <h2>Our <span class="gold-text">Services</span> & Rate Card</h2>
+                    <p>Premium treatments to make you glow.</p>
+                </div>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid" aria-label="Grid View">
+                        <ion-icon name="grid-outline"></ion-icon>
+                    </button>
+                    <button class="view-btn" data-view="list" aria-label="List View">
+                        <ion-icon name="list-outline"></ion-icon>
+                    </button>
+                </div>
             </div>
+
+            <div class="category-filters" id="category-filters">
+                <button class="filter-btn active" data-filter="all">All Services</button>
+                <!-- Categories from Strapi will go here -->
+            </div>
+
             <div class="services-container" id="services-cms-content">
                 <!-- Services from Strapi will go here. Fallback structure below. -->
                 <div class="loading-spinner">Loading from Strapi...</div>
@@ -88,8 +119,10 @@
                 <div class="about-card">
                     <h3>The Story of ITRIK</h3>
                     <p>
-                        Managed by the visionary <strong>Kirti Chudasama</strong>, ITRIK represents a reflection of her passion. 
-                        In fact, "ITRIK" is the beautiful reverse of "KIRTI", symbolizing how true beauty reflects from within.
+                        Managed by the visionary <strong>Kirti Chudasama</strong>, ITRIK represents a reflection of her
+                        passion.
+                        In fact, "ITRIK" is the beautiful reverse of "KIRTI", symbolizing how true beauty reflects from
+                        within.
                     </p>
                     <div id="about-cms-content" class="mt-4">
                         <!-- Strapi content about Kirti and the parlour -->
@@ -106,7 +139,8 @@
             </div>
             <div class="contact-container" id="contact-cms-content">
                 <div class="contact-card">
-                    <form class="contact-form" onsubmit="event.preventDefault(); alert('In a real app, this connects to Strapi POST /api/messages');">
+                    <form class="contact-form"
+                        onsubmit="event.preventDefault(); alert('In a real app, this connects to Strapi POST /api/messages');">
                         <div class="form-group">
                             <label>Name</label>
                             <input type="text" placeholder="Your Name" required>
@@ -163,4 +197,5 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>

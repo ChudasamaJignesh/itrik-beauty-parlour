@@ -3,15 +3,15 @@
     --gold: #d4af37;
     --gold-dim: rgba(212, 175, 55, 0.4);
     --gold-glow: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6));
-    
+
     --bg-color: #ffffff;
     --surface-color: #f5f5f5;
     --text-color: #111111;
     --text-muted: #555555;
-    
+
     --nav-bg: rgba(255, 255, 255, 0.9);
     --border-color: #e0e0e0;
-    
+
     --header-width: 250px;
     --mobile-nav-height: 65px;
 
@@ -26,7 +26,7 @@
     --surface-color: #1a1a1a;
     --text-color: #f7f7f7;
     --text-muted: #aaaaaa;
-    
+
     --nav-bg: rgba(13, 13, 13, 0.9);
     --border-color: #2a2a2a;
 }
@@ -46,7 +46,11 @@ body {
     overflow-x: hidden;
 }
 
-h1, h2, h3, h4, .gold-text {
+h1,
+h2,
+h3,
+h4,
+.gold-text {
     font-family: var(--font-serif);
 }
 
@@ -82,17 +86,9 @@ h1, h2, h3, h4, .gold-text {
     max-width: 150px;
     border-radius: 8px;
     /* Adjusting the logo visually in dark/light */
-    filter: var(--logo-filter, none);
+    filter: url(#remove-black-bg);
     transition: filter 0.4s;
-    /* Given black bg in image, we can try to blend it, but screen is best on true dark */
 }
-
-/* Dark theme specific logo trick if image is solid black */
-[data-theme="dark"] .brand-logo {
-    mix-blend-mode: plus-lighter;
-}
-/* Light theme might be trickier with solid black BG image, 
-   ideally the user provides a transparent PNG later */
 
 .desktop-nav {
     flex-grow: 1;
@@ -121,12 +117,14 @@ h1, h2, h3, h4, .gold-text {
     transition: 0.3s ease;
 }
 
-.nav-item:hover, .nav-item.active {
+.nav-item:hover,
+.nav-item.active {
     color: var(--gold);
     background: linear-gradient(90deg, var(--gold-dim) 0%, transparent 100%);
 }
 
-.nav-item:hover ion-icon, .nav-item.active ion-icon {
+.nav-item:hover ion-icon,
+.nav-item.active ion-icon {
     color: var(--gold);
     transform: scale(1.1);
 }
@@ -170,8 +168,13 @@ h1, h2, h3, h4, .gold-text {
     box-shadow: 0 0 15px var(--gold-dim);
 }
 
-[data-theme="dark"] .dark-icon { display: none; }
-[data-theme="light"] .light-icon { display: none; }
+[data-theme="dark"] .dark-icon {
+    display: none;
+}
+
+[data-theme="light"] .light-icon {
+    display: none;
+}
 
 /* ==========================================
    Main Content Layout
@@ -194,8 +197,15 @@ h1, h2, h3, h4, .gold-text {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .section-header {
@@ -223,7 +233,7 @@ h1, h2, h3, h4, .gold-text {
     text-align: center;
     border-radius: 16px;
     background: linear-gradient(135deg, var(--surface-color), var(--bg-color));
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
 }
@@ -265,25 +275,139 @@ h1, h2, h3, h4, .gold-text {
     font-weight: 600;
     border-radius: 30px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s ease;
     box-shadow: 0 4px 15px var(--gold-dim);
     z-index: 2;
     position: relative;
+    overflow: hidden;
+    /* Contains the shine effect */
+}
+
+/* Fast, lightweight CSS-only shine animation */
+.cta-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-20deg);
+    transition: all 0.6s ease;
 }
 
 .cta-button:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px var(--gold-dim);
-    filter: brightness(1.1);
+    box-shadow: 0 8px 25px var(--gold-dim);
+    color: #000;
+}
+
+/* Trigger the shine on hover */
+.cta-button:hover::after {
+    left: 150%;
 }
 
 /* ==========================================
    Menu & Rate Card Component
 ============================================= */
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    text-align: left;
+}
+
+.menu-header .header-text p {
+    margin-bottom: 0;
+}
+
+@media (max-width: 600px) {
+    .menu-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+    }
+}
+
+.view-toggle {
+    display: flex;
+    gap: 0.5rem;
+    background: var(--surface-color);
+    padding: 0.5rem;
+    border-radius: 30px;
+    border: 1px solid var(--border-color);
+}
+
+.view-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-btn:hover {
+    color: var(--gold);
+}
+
+.view-btn.active {
+    background: var(--gold);
+    color: #111;
+    box-shadow: 0 2px 10px var(--gold-dim);
+}
+
+.category-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+
+.filter-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.filter-btn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #111;
+    font-weight: 600;
+    box-shadow: 0 4px 10px var(--gold-dim);
+}
+
 .services-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 2rem;
+    transition: 0.3s;
+}
+
+/* List View Modifier */
+.services-container.list-view {
+    display: flex;
+    flex-direction: column;
 }
 
 .service-card {
@@ -293,6 +417,35 @@ h1, h2, h3, h4, .gold-text {
     padding: 2rem;
     transition: 0.3s ease;
     text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.services-container.list-view .service-card {
+    flex-direction: row;
+    text-align: left;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1.5rem 2rem;
+    gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .services-container.list-view .service-card {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+.services-container.list-view .service-card ion-icon {
+    margin-bottom: 0 !important;
+}
+
+.service-card-content {
+    flex-grow: 1;
 }
 
 .service-card:hover {
@@ -306,6 +459,40 @@ h1, h2, h3, h4, .gold-text {
     color: var(--gold);
     font-weight: 700;
     margin: 1rem 0;
+    font-family: var(--font-serif);
+}
+
+.services-container.list-view .service-price {
+    margin: 0;
+    white-space: nowrap;
+}
+
+.service-options-list {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--border-color);
+}
+
+.service-option-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    width: 100%;
+    gap: 1.5rem;
+}
+
+.option-name {
+    color: var(--text-muted);
+    text-align: left;
+}
+
+.option-price {
+    font-weight: 600;
+    color: var(--gold);
     font-family: var(--font-serif);
 }
 
@@ -377,7 +564,8 @@ h1, h2, h3, h4, .gold-text {
     font-weight: 500;
 }
 
-.form-group input, .form-group textarea {
+.form-group input,
+.form-group textarea {
     width: 100%;
     padding: 0.8rem;
     background: var(--bg-color);
@@ -387,13 +575,14 @@ h1, h2, h3, h4, .gold-text {
     font-family: var(--font-sans);
 }
 
-.form-group input:focus, .form-group textarea:focus {
+.form-group input:focus,
+.form-group textarea:focus {
     outline: none;
     border-color: var(--gold);
 }
 
 .contact-info {
-    background: linear-gradient(135deg, rgba(212,175,55,0.1), transparent);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), transparent);
     padding: 3rem;
     display: flex;
     flex-direction: column;
@@ -451,6 +640,7 @@ h1, h2, h3, h4, .gold-text {
     color: var(--gold);
     background: none;
 }
+
 .mobile-nav .nav-item.active ion-icon {
     transform: none;
 }
@@ -466,22 +656,22 @@ h1, h2, h3, h4, .gold-text {
         border-right: none;
         border-bottom: 1px solid var(--border-color);
     }
-    
+
     .logo-container {
         padding: 0;
         border: none;
     }
-    
+
     .brand-logo {
         max-width: 120px;
         max-height: 50px;
         object-fit: contain;
     }
-    
+
     .desktop-nav {
         display: none;
     }
-    
+
     .theme-toggle {
         padding: 0;
         border: none;
@@ -490,18 +680,19 @@ h1, h2, h3, h4, .gold-text {
 
     .content-area {
         margin-left: 0;
-        padding-top: 70px; /* offset top header */
+        padding-top: 70px;
+        /* offset top header */
         padding-bottom: calc(var(--mobile-nav-height) + 20px);
     }
-    
+
     .page-section {
         padding: 2rem 1rem;
     }
-    
+
     .hero-content h1 {
         font-size: 2.5rem;
     }
-    
+
     .mobile-nav {
         display: flex;
     }
