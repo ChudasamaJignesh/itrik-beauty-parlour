@@ -1,0 +1,517 @@
+:root {
+    /* Base Variables (Light Mode Default if user switches) */
+    --gold: #d4af37;
+    --gold-dim: rgba(212, 175, 55, 0.4);
+    --gold-glow: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6));
+    
+    --bg-color: #ffffff;
+    --surface-color: #f5f5f5;
+    --text-color: #111111;
+    --text-muted: #555555;
+    
+    --nav-bg: rgba(255, 255, 255, 0.9);
+    --border-color: #e0e0e0;
+    
+    --header-width: 250px;
+    --mobile-nav-height: 65px;
+
+    /* Fonts */
+    --font-sans: 'Outfit', sans-serif;
+    --font-serif: 'Playfair Display', serif;
+}
+
+[data-theme="dark"] {
+    /* Dark Mode Defaults */
+    --bg-color: #0d0d0d;
+    --surface-color: #1a1a1a;
+    --text-color: #f7f7f7;
+    --text-muted: #aaaaaa;
+    
+    --nav-bg: rgba(13, 13, 13, 0.9);
+    --border-color: #2a2a2a;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, .gold-text {
+    font-family: var(--font-serif);
+}
+
+.gold-text {
+    color: var(--gold);
+}
+
+/* ==========================================
+   Desktop Navigation (Sidebar)
+============================================= */
+.app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--header-width);
+    height: 100vh;
+    background-color: var(--nav-bg);
+    border-right: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    transition: all 0.4s;
+}
+
+.logo-container {
+    padding: 2rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.brand-logo {
+    max-width: 150px;
+    border-radius: 8px;
+    /* Adjusting the logo visually in dark/light */
+    filter: var(--logo-filter, none);
+    transition: filter 0.4s;
+    /* Given black bg in image, we can try to blend it, but screen is best on true dark */
+}
+
+/* Dark theme specific logo trick if image is solid black */
+[data-theme="dark"] .brand-logo {
+    mix-blend-mode: plus-lighter;
+}
+/* Light theme might be trickier with solid black BG image, 
+   ideally the user provides a transparent PNG later */
+
+.desktop-nav {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 0;
+    gap: 1rem;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    position: relative;
+    transition: 0.3s ease;
+}
+
+.nav-item ion-icon {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    transition: 0.3s ease;
+}
+
+.nav-item:hover, .nav-item.active {
+    color: var(--gold);
+    background: linear-gradient(90deg, var(--gold-dim) 0%, transparent 100%);
+}
+
+.nav-item:hover ion-icon, .nav-item.active ion-icon {
+    color: var(--gold);
+    transform: scale(1.1);
+}
+
+.nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background-color: var(--gold);
+}
+
+.theme-toggle {
+    margin-top: auto;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid var(--border-color);
+}
+
+#theme-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: 0.3s;
+}
+
+#theme-btn:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 15px var(--gold-dim);
+}
+
+[data-theme="dark"] .dark-icon { display: none; }
+[data-theme="light"] .light-icon { display: none; }
+
+/* ==========================================
+   Main Content Layout
+============================================= */
+.content-area {
+    margin-left: var(--header-width);
+    padding: 0;
+    min-height: 100vh;
+}
+
+.page-section {
+    display: none;
+    padding: 3rem;
+    animation: fadeIn 0.5s ease;
+    min-height: 100vh;
+}
+
+.page-section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.section-header {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.section-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.section-header p {
+    color: var(--text-muted);
+}
+
+/* ==========================================
+   Home Hero
+============================================= */
+.hero {
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--surface-color), var(--bg-color));
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: var(--gold-dim);
+    filter: blur(100px);
+    border-radius: 50%;
+    top: -100px;
+    left: -100px;
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    z-index: 2;
+    position: relative;
+}
+
+.hero-content .subtitle {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    z-index: 2;
+    position: relative;
+}
+
+.cta-button {
+    background: var(--gold);
+    color: #111;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 15px var(--gold-dim);
+    z-index: 2;
+    position: relative;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px var(--gold-dim);
+    filter: brightness(1.1);
+}
+
+/* ==========================================
+   Menu & Rate Card Component
+============================================= */
+.services-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.service-card {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: 0.3s ease;
+    text-align: center;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--gold);
+    box-shadow: 0 10px 25px var(--gold-dim);
+}
+
+.service-price {
+    font-size: 1.5rem;
+    color: var(--gold);
+    font-weight: 700;
+    margin: 1rem 0;
+    font-family: var(--font-serif);
+}
+
+.loading-spinner {
+    text-align: center;
+    color: var(--gold);
+    font-size: 1.2rem;
+    grid-column: 1 / -1;
+    padding: 2rem;
+}
+
+/* ==========================================
+   About component
+============================================= */
+.about-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.about-card {
+    background: var(--surface-color);
+    padding: 3rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.about-card h3 {
+    color: var(--gold);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* ==========================================
+   Contact component
+============================================= */
+.contact-container {
+    display: flex;
+    justify-content: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.contact-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    background: var(--surface-color);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    width: 100%;
+}
+
+.contact-form {
+    padding: 3rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 8px;
+    font-family: var(--font-sans);
+}
+
+.form-group input:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.contact-info {
+    background: linear-gradient(135deg, rgba(212,175,55,0.1), transparent);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    border-left: 1px solid var(--border-color);
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.1rem;
+}
+
+.info-item ion-icon {
+    font-size: 1.8rem;
+    color: var(--gold);
+}
+
+
+/* ==========================================
+   Responsive Mobile Navigation
+============================================= */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: var(--mobile-nav-height);
+    background: var(--nav-bg);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border-color);
+    z-index: 1000;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.mobile-nav .nav-item {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.mobile-nav .nav-item ion-icon {
+    font-size: 1.6rem;
+}
+
+.mobile-nav .nav-item.active {
+    color: var(--gold);
+    background: none;
+}
+.mobile-nav .nav-item.active ion-icon {
+    transform: none;
+}
+
+@media (max-width: 768px) {
+    .app-header {
+        width: 100%;
+        height: 70px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1rem;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .logo-container {
+        padding: 0;
+        border: none;
+    }
+    
+    .brand-logo {
+        max-width: 120px;
+        max-height: 50px;
+        object-fit: contain;
+    }
+    
+    .desktop-nav {
+        display: none;
+    }
+    
+    .theme-toggle {
+        padding: 0;
+        border: none;
+        margin-top: 0;
+    }
+
+    .content-area {
+        margin-left: 0;
+        padding-top: 70px; /* offset top header */
+        padding-bottom: calc(var(--mobile-nav-height) + 20px);
+    }
+    
+    .page-section {
+        padding: 2rem 1rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .mobile-nav {
+        display: flex;
+    }
+
+    .contact-card {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-info {
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+    }
+}
