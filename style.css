@@ -139,9 +139,35 @@ h4,
     background-color: var(--gold);
 }
 
+.lang-selector {
+    padding: 1rem 2rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+#language-select {
+    background: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    outline: none;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+#language-select:focus,
+#language-select:hover {
+    border-color: var(--gold);
+}
+
 .theme-toggle {
     margin-top: auto;
-    padding: 2rem;
+    padding: 1rem 2rem 2rem;
     display: flex;
     justify-content: center;
     border-top: 1px solid var(--border-color);
@@ -672,10 +698,29 @@ h4,
         display: none;
     }
 
-    .theme-toggle {
+    .theme-toggle,
+    .lang-selector {
         padding: 0;
         border: none;
         margin-top: 0;
+    }
+
+    .lang-selector {
+        margin-right: 10px;
+        margin-left: auto;
+    }
+
+    #language-select {
+        padding: 0.3rem;
+        font-size: 0.9rem;
+        margin: 0;
+        border: none;
+        outline: none;
+        background: var(--surface-color);
+    }
+
+    .app-header {
+        justify-content: flex-start;
     }
 
     .content-area {

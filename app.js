@@ -4,8 +4,160 @@ document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initNavigation();
     initViewToggle();
+    initI18n();
     loadStrapiData(); // Simulate loading content from CMS
 });
+
+
+/* ==============================================
+   Internationalization (i18n)
+================================================= */
+const translations = {
+    en: {
+        navHome: "Home",
+        navMenu: "Menu / Rate Card",
+        navAbout: "About",
+        navContact: "Contact Us",
+        mobileMenu: "Menu",
+        mobileContact: "Contact",
+        heroWelcome: "Welcome to",
+        heroSubtitle: "Elegance and Beauty, Redefined.",
+        heroBtn: "View Our Services",
+        menuTitle: "Our",
+        menuTitle2: " & Rate Card",
+        menuSubtitle: "Premium treatments to make you glow.",
+        filterAll: "All Services",
+        aboutTitle: "About",
+        aboutStory: "The Story of ITRIK",
+        aboutText: `Managed by the visionary <strong>Kirti Chudasama</strong>, ITRIK represents a reflection of her passion. In fact, "ITRIK" is the beautiful reverse of "KIRTI", symbolizing how true beauty reflects from within.`,
+        contactTitle: "Contact",
+        contactTitle2: " Us",
+        contactSubtitle: "We'd love to hear from you. Book an appointment today!",
+        formName: "Name",
+        formNamePlaceholder: "Your Name",
+        formEmail: "Email",
+        formEmailPlaceholder: "Your Email",
+        formMessage: "Message",
+        formMessagePlaceholder: "How can we help?",
+        formBtn: "Send Message",
+        loading: "Loading from Strapi...",
+        noServices: "No services found. Add some in Strapi!",
+        bookBtn: "Book Now",
+        startsFrom: "Starting from ₹"
+    },
+    hi: {
+        navHome: "होम",
+        navMenu: "मेनू / रेट कार्ड",
+        navAbout: "हमारे बारे में",
+        navContact: "संपर्क करें",
+        mobileMenu: "मेनू",
+        mobileContact: "संपर्क",
+        heroWelcome: "आपका स्वागत है",
+        heroSubtitle: "सुंदरता और लालित्य, पुनर्परिभाषित।",
+        heroBtn: "हमारी सेवाएं देखें",
+        menuTitle: "हमारी",
+        menuTitle2: " और रेट कार्ड",
+        menuSubtitle: "आपको निखारने के लिए प्रीमियम उपचार।",
+        filterAll: "सभी सेवाएं",
+        aboutTitle: "हमारे बारे में",
+        aboutStory: "आईटीआरईके की कहानी",
+        aboutText: `दूरदर्शी <strong>कीर्ति चुडासमा</strong> द्वारा प्रबंधित, ITRIK उनके जुनून का एक प्रतिबिंब है। वास्तव में, "ITRIK" "KIRTI" का सुंदर उल्टा रूप है, जो प्रतीक है कि सच्ची सुंदरता भीतर से प्रतिबिंबित होती है।`,
+        contactTitle: "संपर्क",
+        contactTitle2: " करें",
+        contactSubtitle: "हम आपसे सुनना पसंद करेंगे। आज ही अपना अपॉइंटमेंट बुक करें!",
+        formName: "नाम",
+        formNamePlaceholder: "आपका नाम",
+        formEmail: "ईमेल",
+        formEmailPlaceholder: "आपका ईमेल",
+        formMessage: "संदेश",
+        formMessagePlaceholder: "हम आपकी कैसे मदद कर सकते हैं?",
+        formBtn: "संदेश भेजें",
+        loading: "लोड हो रहा है...",
+        noServices: "कोई सेवा नहीं मिली।",
+        bookBtn: "अभी बुक करें",
+        startsFrom: "शुरुआती कीमत ₹"
+    },
+    gu: {
+        navHome: "હોમ",
+        navMenu: "મેનુ / રેટ કાર્ડ",
+        navAbout: "અમારા વિશે",
+        navContact: "સંપર્ક કરો",
+        mobileMenu: "મેનુ",
+        mobileContact: "સંપર્ક",
+        heroWelcome: "સ્વાગત છે",
+        heroSubtitle: "સુંદરતા અને લાવણ્ય, પુનઃવ્યાખ્યાયિત.",
+        heroBtn: "અમારી સેવાઓ જુઓ",
+        menuTitle: "અમારી",
+        menuTitle2: " અને રેટ કાર્ડ",
+        menuSubtitle: "તમને ચમકાવવા માટે પ્રીમિયમ ઉપચાર.",
+        filterAll: "બધી સેવાઓ",
+        aboutTitle: "અમારા વિશે",
+        aboutStory: "ઇત્રિકની વાર્તા",
+        aboutText: `દૂરદર્શી <strong>કીર્તિ ચુડાસમા</strong> દ્વારા સંચાલિત, ITRIK તેમના જુસ્સાનું પ્રતિબિંબ છે. હકીકતમાં, "ITRIK" એ "KIRTI" નું સુંદર ઊલટું સ્વરૂપ છે, જે પ્રતીક છે કે સાચી સુંદરતા અંદરથી જ પ્રતિબિંબિત થાય છે.`,
+        contactTitle: "સંપર્ક",
+        contactTitle2: " કરો",
+        contactSubtitle: "અમે તમારી પાસેથી સાંભળવા માંગીએ છીએ. આજે જ તમારી એપોઇન્ટમેન્ટ બુક કરો!",
+        formName: "નામ",
+        formNamePlaceholder: "તમારું નામ",
+        formEmail: "ઇમેઇલ",
+        formEmailPlaceholder: "તમારું ઇમેઇલ",
+        formMessage: "સંદેશ",
+        formMessagePlaceholder: "અમે તમારી કેવી રીતે મદદ કરી શકીએ?",
+        formBtn: "સંદેશ મોકલો",
+        loading: "લોડ થઈ રહ્યું છે...",
+        noServices: "કોઈ સેવાઓ મળી નથી.",
+        bookBtn: "હમણાં બુક કરો",
+        startsFrom: "શરૂઆતી કિંમત ₹"
+    }
+};
+
+let currentLanguage = 'en';
+
+function initI18n() {
+    const selector = document.getElementById('language-select');
+    if (!selector) return;
+
+    // Load saved lang
+    const savedLang = localStorage.getItem('siteLang');
+    if (savedLang && translations[savedLang]) {
+        currentLanguage = savedLang;
+        selector.value = currentLanguage;
+    }
+
+    applyTranslations();
+
+    selector.addEventListener('change', (e) => {
+        currentLanguage = e.target.value;
+        localStorage.setItem('siteLang', currentLanguage);
+        applyTranslations();
+
+        // Re-render services to update button text language dynamically
+        if (window.itrikServices) {
+            renderServices(window.itrikServices);
+        }
+    });
+}
+
+function applyTranslations() {
+    const dict = translations[currentLanguage];
+    if (!dict) return;
+
+    // Translate standard text nodes
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+            el.innerHTML = dict[key];
+        }
+    });
+
+    // Translate placeholders
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key]) {
+            el.placeholder = dict[key];
+        }
+    });
+}
 
 /* ==============================================
    Theme Management (Dark / Light)
@@ -204,7 +356,7 @@ function renderServices(services) {
             });
             pricingHTML += '</div>';
         } else {
-            pricingHTML = `<div class="service-price">Starting from ₹${s.price}</div>`;
+            pricingHTML = `<div class="service-price">${translations[currentLanguage].startsFrom}${s.price}</div>`;
         }
 
         // Wrapper added to separate icon and button from text in flex lists
@@ -215,7 +367,7 @@ function renderServices(services) {
                 <p>${s.description || ''}</p>
                 ${pricingHTML}
             </div>
-            <button class="cta-button" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="navigateTo('contact')">Book Now</button>
+            <button class="cta-button" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="navigateTo('contact')">${translations[currentLanguage].bookBtn}</button>
         `;
         container.appendChild(card);
     });
