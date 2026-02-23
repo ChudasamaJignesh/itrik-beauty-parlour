@@ -250,6 +250,26 @@ async function loadStrapiData() {
         const contactData = await contactRes.json();
         renderContact(contactData.data);
 
+        // 4. Fetch Global Config (Logo & Favicon)
+        const globalRes = await fetch('http://localhost:1337/api/global?populate=*');
+        const globalData = await globalRes.json();
+        if (globalData && globalData.data) {
+            const config = globalData.data;
+            if (config.logo && config.logo.url) {
+                // Update brand logo in Header (use localhost:1337 prefix for Strapi uploads)
+                const brandLogoEl = document.getElementById('brand-logo');
+                if (brandLogoEl) brandLogoEl.src = `http://localhost:1337${config.logo.url}`;
+            }
+            if (config.favicon && config.favicon.url) {
+                // Update favicon dynamically
+                const faviconEl = document.getElementById('dynamic-favicon');
+                if (faviconEl) faviconEl.href = `http://localhost:1337${config.favicon.url}`;
+            }
+            if (config.siteName) {
+                document.title = config.siteName;
+            }
+        }
+
     } catch (error) {
         console.error('Failed to load data from CMS', error);
         document.getElementById('services-cms-content').innerHTML = `

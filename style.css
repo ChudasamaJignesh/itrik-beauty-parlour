@@ -16,8 +16,8 @@
     --mobile-nav-height: 65px;
 
     /* Fonts */
-    --font-sans: 'Outfit', sans-serif;
-    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'Montserrat', sans-serif;
+    --font-serif: 'Montserrat', sans-serif;
 }
 
 [data-theme="dark"] {

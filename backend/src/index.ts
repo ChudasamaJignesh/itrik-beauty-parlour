@@ -11,7 +11,7 @@ export default {
       });
 
       if (publicRole) {
-        const apis = ['category', 'service', 'about', 'contact'];
+        const apis = ['category', 'service', 'about', 'contact', 'global'];
         const actions = ['find', 'findOne'];
 
         for (const api of apis) {
@@ -157,9 +157,21 @@ export default {
         });
       }
 
+      // 4.5 Add Dummy Global Settings
+      const existingGlobal = await strapi.documents('api::global.global').findMany();
+      if (existingGlobal.length === 0) {
+        console.log('Adding dummy global configuration...');
+        await strapi.documents('api::global.global').create({
+          data: {
+            siteName: 'ITRIK Beauty Parlour',
+            status: 'published'
+          }
+        });
+      }
+
       // 5. Publish all drafts to ensure they are available to the public API
       console.log('Publishing all dummy data drafts...');
-      const APIs = ['api::category.category', 'api::service.service', 'api::about.about', 'api::contact.contact'];
+      const APIs = ['api::category.category', 'api::service.service', 'api::about.about', 'api::contact.contact', 'api::global.global'];
       for (const api of APIs) {
         const drafts = await strapi.documents(api as any).findMany({ status: 'draft' });
         for (const draft of drafts) {

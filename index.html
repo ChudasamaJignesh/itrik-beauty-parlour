@@ -7,11 +7,12 @@
     <title>ITRIK Beauty Parlour</title>
     <meta name="description"
         content="Premium Beauty Parlour managed by Kirti Chudasama. Offering top-tier services for all your beauty needs.">
+    <!-- Dynamic Favicon -->
+    <link id="dynamic-favicon" rel="icon" type="image/png" href="logo.png">
     <!-- Google Fonts for Modern Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <!-- Ionicons for Navigation Icons -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -81,7 +82,8 @@
                 <div class="hero-content">
                     <h1><span data-i18n="heroWelcome">Welcome to</span> <span class="gold-text">ITRIK</span></h1>
                     <p class="subtitle" data-i18n="heroSubtitle">Elegance and Beauty, Redefined.</p>
-                    <button class="cta-button" onclick="navigateTo('menu')" data-i18n="heroBtn">View Our Services</button>
+                    <button class="cta-button" onclick="navigateTo('menu')" data-i18n="heroBtn">View Our
+                        Services</button>
                 </div>
             </div>
             <div class="cms-content" id="home-cms-content">
@@ -93,7 +95,8 @@
         <section id="menu" class="page-section">
             <div class="section-header menu-header">
                 <div class="header-text">
-                    <h2><span data-i18n="menuTitle">Our</span> <span class="gold-text">Services</span><span data-i18n="menuTitle2"> & Rate Card</span></h2>
+                    <h2><span data-i18n="menuTitle">Our</span> <span class="gold-text">Services</span><span
+                            data-i18n="menuTitle2"> & Rate Card</span></h2>
                     <p data-i18n="menuSubtitle">Premium treatments to make you glow.</p>
                 </div>
                 <div class="view-toggle">
@@ -126,8 +129,10 @@
                 <div class="about-card">
                     <h3 data-i18n="aboutStory">The Story of ITRIK</h3>
                     <p data-i18n="aboutText">
-                        Managed by the visionary <strong>Kirti Chudasama</strong>, ITRIK represents a reflection of her passion.
-                        In fact, "ITRIK" is the beautiful reverse of "KIRTI", symbolizing how true beauty reflects from within.
+                        Managed by the visionary <strong>Kirti Chudasama</strong>, ITRIK represents a reflection of her
+                        passion.
+                        In fact, "ITRIK" is the beautiful reverse of "KIRTI", symbolizing how true beauty reflects from
+                        within.
                     </p>
                     <div id="about-cms-content" class="mt-4">
                         <!-- Strapi content about Kirti and the parlour -->
@@ -139,7 +144,8 @@
         <!-- Contact Section -->
         <section id="contact" class="page-section">
             <div class="section-header">
-                <h2><span class="gold-text" data-i18n="contactTitle">Contact</span><span data-i18n="contactTitle2"> Us</span></h2>
+                <h2><span class="gold-text" data-i18n="contactTitle">Contact</span><span data-i18n="contactTitle2">
+                        Us</span></h2>
                 <p data-i18n="contactSubtitle">We'd love to hear from you. Book an appointment today!</p>
             </div>
             <div class="contact-container" id="contact-cms-content">
@@ -148,15 +154,18 @@
                         onsubmit="event.preventDefault(); alert('In a real app, this connects to Strapi POST /api/messages');">
                         <div class="form-group">
                             <label data-i18n="formName">Name</label>
-                            <input type="text" placeholder="Your Name" data-i18n-placeholder="formNamePlaceholder" required>
+                            <input type="text" placeholder="Your Name" data-i18n-placeholder="formNamePlaceholder"
+                                required>
                         </div>
                         <div class="form-group">
                             <label data-i18n="formEmail">Email</label>
-                            <input type="email" placeholder="Your Email" data-i18n-placeholder="formEmailPlaceholder" required>
+                            <input type="email" placeholder="Your Email" data-i18n-placeholder="formEmailPlaceholder"
+                                required>
                         </div>
                         <div class="form-group">
                             <label data-i18n="formMessage">Message</label>
-                            <textarea rows="4" placeholder="How can we help?" data-i18n-placeholder="formMessagePlaceholder" required></textarea>
+                            <textarea rows="4" placeholder="How can we help?"
+                                data-i18n-placeholder="formMessagePlaceholder" required></textarea>
                         </div>
                         <button type="submit" class="cta-button" data-i18n="formBtn">Send Message</button>
                     </form>
